@@ -1,0 +1,5 @@
+php login and signup and contact us form
+login and signup in navbar
+scrollspy
+search bar as above
+alert on login and sign[ and contact

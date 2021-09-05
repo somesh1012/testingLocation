@@ -1,0 +1,103 @@
+.home{
+    background: url('images/home-img.jpeg') no-repeat center center/cover;
+    height: 87vh;
+}
+  
+ .changecolor{
+    background-color: black !important;
+    color: white !important;
+ }
+ .changecolor:hover{
+       background-color: white  !important;
+       color: black !important;
+       transition: 0.3s;
+ }
+
+ .iconcolor{
+    background-color: black !important;
+    color: white  !important;
+ }
+ .iconcolor:hover{
+     background-color: #d3ad7f  !important;
+     color: black  !important;
+ }
+
+ input[type="text"] {
+    width: 100%;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 8px;
+    box-sizing: border-box;
+    transition: 0.3s;
+  }
+  
+  input[type="text"]:focus {
+    /* border-color: dodgerBlue;
+    box-shadow: 0 0 8px 0 dodgerBlue; */
+  }
+  
+  .inputWithIcon input[type="text"] {
+    padding-left: 40px;
+  }
+  
+  .inputWithIcon {
+    position: relative;
+  }
+  
+  .inputWithIcon i {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    padding: 9px 8px;
+    color: white;
+    transition: 0.3s;
+  }
+  
+  .inputWithIcon input[type="text"]:focus + i {
+    /* color: dodgerBlue; */
+  }
+  
+  .inputWithIcon.inputIconBg i {
+    background-color: #aaa;
+    color: white;
+    padding: 9px 4px;
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .inputWithIcon.inputIconBg input[type="text"]:focus + i {
+    color: white;
+    /* background-color: dodgerBlue; */
+  }
+
+  .img-1:hover{
+    transform: scale(1.2);
+    transition: 0.5s;
+  }
+  
+  .icon-2{
+       background: #d3ad7f;
+       padding: 17px;
+       color: white;
+       border-radius: 100px;
+  }
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: black; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: white; 
+    border-radius: 20px;
+  }
+  
+ .search-form{
+   position: relative;
+   top: 100px;
+ }

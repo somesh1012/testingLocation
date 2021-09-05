@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>form to google sheet-2</title>
+  <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+</head>
+
+<body style="padding: 20px 50px;">
+  <form method="POST" name="Khurak">
+  <div class="mb-3">
+  <label for="name" class="form-label">user Name</label>
+  <input type="text" name="name" class="form-control" id="name" placeholder="enter your name" required>
+</div>
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label"> mobile</label>
+  <input type="number" class="form-control" name="number" id="exampleFormControlInput1" placeholder="enter your number">
+</div>
+<div class="mb-3">
+  <label for="exampleFormControlTextarea1" class="form-label">District</label>
+  <input class="form-control" name="district" id="exampleFormControlTextarea1" rows="3" placeholder="district"></input>
+</div>
+  
+<div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">pincode</label>
+    <input class="form-control" name="pincode" id="exampleFormControlTextarea1" rows="3" placeholder="pincode"></input>
+  </div>
+         <!-- main location -->
+     
+<label for="lat">Latitude</label>
+<input type="text" class="lat required" name="latitude">
+ 
+<label for="lon">Longitude</label>
+<input type="text" class="lon required" name="longitude">
+
+<label for="test">location</label>
+<input type="text" name="location" class="test required" data-required data-error-message="locatiojn required">
+ 
+      <!-- main location -->
+<input type="submit" name="submit"  disabled="disabled">
+
+</form>
+
+ <!-- again location -->
+ <p><button onclick="geoFindMe()">Show my location</button></p>
+ <div id="out"></div>
+     <!-- end -->
+<script type="text/javascript">
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyBLDoYWNCAtyMw-zJqRXcSh2FaV7uZk_DX6YDZ1_gXnTgajnTLg049Rj_qUCzLQKRw7A/exec'
+            const form = document.forms['Khurak']
+          
+            form.addEventListener('submit', e => {
+              e.preventDefault()
+              fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => alert("Thanks for Contacting us..! We Will Contact You Soon..."))
+                .catch(error => console.error('Error!', error.message))
+            })
+</script>
+  <!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+  var $locationText = $(".location");
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      geoLocationSuccess,
+      geoLocationError,
+      { timeout: 10000 }
+    );
+  } else {
+    alert("your browser doesn't support geolocation");
+  }
+  function geoLocationSuccess(pos) {
+    // get user lat,long
+    var myLat = pos.coords.latitude, myLng = pos.coords.longitude, loadingTimeout;
+    $(".lat").val(pos.coords.latitude);
+    $(".lon").val(pos.coords.longitude);
+  
+    var loading = function () {
+      $locationText.text("fetching...");
+    };
+  
+    loadingTimeout = setTimeout(loading, 600);
+  
+    var request = $.get(
+      "https://nominatim.openstreetmap.org/reverse?format=json&lat=" +
+        myLat +
+        "&lon=" +
+        myLng
+    ).done(function (data) {
+        if (loadingTimeout) {
+          clearTimeout(loadingTimeout);
+          loadingTimeout = null;
+          $locationText.text(data.display_name);
+          $(".test").val(data.display_name);
+        }
+      })
+      .fail(function () {
+        // handle error
+      });
+  }
+  
+  function geoLocationError(error) {
+    var errors = {
+      1: "location required",
+      2: "Position unavailable",
+      3: "Request timeout"
+    };
+    alert("Error: " + errors[error.code]);
+  }
+  
+    // required function
+    function validate(event){
+  event.preventDefault();
+  //Validate each form input
+  $("form input[data-required]").each(function(index){
+    var $_this = $(this);
+    var $_error = $_this.next(".error");
+    if($_this.val().length == 0) {
+      if($_error.length == 0){
+         $_this.after('<p class="error">'+$_this.data("error-message")+'</p>');
+      }
+    } else
+         $_error.remove();
+  });
+}
+
+
+$("form").on({
+  "submit": function(){
+    validate(event);
+  },
+  "change": function(){
+     validate(event);
+  }
+});
+    
+    // button disable until field is not filled
+    var toggleSubmit = function() {
+  var isDisabled = ![].some.call(document.querySelectorAll(".required"), function(input) {
+    return input.value.length;
+  });
+  
+  var submitBtn = document.querySelector("input[type=submit]");
+  
+  if (isDisabled) {
+    submitBtn.setAttribute("disabled", "disabled");
+  } else {
+    submitBtn.removeAttribute("disabled");
+  }
+};
+
+document.querySelector("form").addEventListener("input", toggleSubmit, false);
+    
+    // second location
+    function geoFindMe() {
+  var output = document.getElementById("out");
+
+  if (!navigator.geolocation){
+    output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+    return;
+  }
+
+  function success(position) {
+    var latitude  = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+
+    var img = new Image();
+    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=13&size=300x300&sensor=false";
+
+    output.appendChild(img);
+  };
+
+  function error() {
+    output.innerHTML = "Unable to retrieve your location";
+  };
+
+  output.innerHTML = "<p>Locating…</p>";
+
+  navigator.geolocation.getCurrentPosition(success, error);
+}
+
+  </script>
+</div>
+</body>
+</html>
